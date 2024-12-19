@@ -2,30 +2,31 @@
 <html lang="en">
 <head>
     @include('includes.head')
-        <!-- Local FontAwesome CSS -->
-        <link rel="stylesheet" href="{{ asset('../fontawesome/css/all.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('../css/bootstrap.min.css') }}">
     <style>
-        /* Custom styles */
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .profile-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-        }
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .position-relative:hover .position-absolute {
+        opacity: 1; /* Show overlay on hover */
+    }
+    .smoky-shadow {
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 5px 15px !important;
+    }
     </style>
+            <!-- Local FontAwesome CSS -->
+            <link rel="stylesheet" href="{{ asset('../fontawesome/css/all.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('../css/bootstrap.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('../css/sweetalert2.min.css') }}">    
 </head>
-<body class="text-sm">
+<body class="text-sm" style="background-color: #cecece;">
     <div class="wrapper">
-        <nav class="main-header navbar navbar-expand-lg navbar-white navbar-light" style="background: rgb(6, 193, 255);">
+        <nav class="main-header navbar navbar-expand-lg navbar-white navbar-light" style="background-color: #084262;">
             @include('includes.nav')
         </nav>
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <aside class="main-sidebar sidebar-dark-primary elevation-4 position-fixed">
             @include('includes.sidebar.sidebar')  
         </aside>
-        <div class="content-wrapper">
+        <div class="content-wrapper" style="background-color: transparent">
             <!-- Content Header -->
             <div class="content-header">
                 <div class="container-fluid">
@@ -35,8 +36,8 @@
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item" style="color: rgb(6, 193, 255);">Home</li>
-                                <li class="breadcrumb-item active">Profile</li>
+                                <a href="dashboard" class="breadcrumb-item active">Dashboard</a>
+                                <li class="breadcrumb-item"><a href="profile">Profile</a></li>
                             </ol>
                         </div>
                     </div>
@@ -46,37 +47,33 @@
 
             <!-- Main content -->
             <section class="content">
-                <div class="container-fluid">
+                <div class="container">
                     <div class="row">
-                        <div class="col-md-5 p-5" style="border: 1px solid rgb(6, 193, 255); border-radius: 10px 30px 30px 10px">
+                        <div class="col-md-12 p-4 mx-auto mb-3 smoky-shadow bg-light">
                             <div class="text-center">
-                                <form id="profile-picture-form" action="{{ route('profile.picture.upload') }}" method="post" enctype="multipart/form-data">
-                                    @csrf
-                                    <label for="profile-picture-input">
-                                        @if(Auth::user()->profile_picture)
-                                            <img id="profile-picture" src="{{ asset('storage/' . Auth::user()->profile_picture) }}" alt="Profile Picture" class="profile-img">
-                                        @else
-                                            <img id="profile-picture" src="https://via.placeholder.com/150" alt="Default Profile Picture" class="profile-img">
-                                        @endif
-                                    </label><br>
-                                    <input type="file" name="profile_picture" style="background: rgb(6, 193, 255); border-radius: 5px;">
-                                    <button type="submit" style="background: rgb(6, 193, 255); border-radius: 5px; border:1px solid green; font-size:14px;">Upload</button>
-                                </form>
-                                <h4 class="mt-3">{{ Auth::user()->name }}</h4>
+                                <label for="profile-picture-input" class="position-relative">
+                                    <img src="../img/sysAd.png" alt="System Admin Profile Picture" class="profile-img border-transparent" style="width: 200px; height: 200px; object-fit: cover;">
+                                </label>
+                                <h2 class="mt-3">{{ Auth::user()->name }}</h2>
                                 @foreach (auth()->user()->roles as $role)
-                                    {{ $role->name }}
+                                    <span class="badge bg-info text-sm">{{ $role->name }}</span>
                                 @endforeach
-                            </div>  
-                            <div class="col-md- mt-3">
+                            </div>
+
+                            <div class="mt-4">
                                 <table class="table table-bordered table-striped" style="background: rgb(6, 193, 255);">
-                                    <h5>Employee Info :</h5>
+                                    <h2 class="mb-4">Employee Info :</h2>
                                     <tbody>
                                         <tr>
-                                            <th>Employee No.</th>
-                                            <td>{{ Auth::user()->employee_no }}</td>
+                                            <th>Name</th>
+                                            <td>{{ Auth::user()->name }}</td>
                                         </tr>
                                         <tr>
-                                            <th>Department</th>
+                                            <th>Email</th>
+                                            <td>{{ Auth::user()->email }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>User-type</th>
                                             <td>
                                                 @foreach (auth()->user()->roles as $role)
                                                     {{ $role->name }}
@@ -89,21 +86,19 @@
                                     </tbody>
                                 </table>
                             </div>
+
                         </div>
-                        <div class="col-md-7">
-                            <table class="table table-bordered table-striped" style="background: rgb(6, 193, 255);">
-                                <h5 class="">General Info :</h5>
-                                <tbody>
-                                    <tr>
-                                        <th>Name</th>
-                                        <td>{{ Auth::user()->name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Email</th>
-                                        <td>{{ Auth::user()->email }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+
+                        <div class="col-md-6 p-1 mx-auto mb-3">
+                            <div class="" style="background-color: transparent">
+                                @include('profile.partials.update-profile-information-form')
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 p-1 mx-auto mb-3">
+                            <div class="" style="background-color: transparent;">
+                                    @include('profile.partials.update-password-form')
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -111,13 +106,14 @@
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-        <footer class="main-footer">
-            @include('includes.footer')
-        </footer>
     </div>
     <!-- ./wrapper -->
     <!-- jQuery (local) -->
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <!-- jQuery (local) -->
     <script src="../js/jquery.min.js"></script>
+
+    <script src="{{ asset('../js/sweetalert2.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             // Toggle sidebar menu
@@ -131,5 +127,6 @@
             });
         });
     </script>
+
 </body>
 </html>

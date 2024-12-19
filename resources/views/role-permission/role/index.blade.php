@@ -66,6 +66,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <a href="{{ url('users') }}" class="btn btn-success float-left mt-3 ml-3">Create Account</a>
                                 <a href="{{ url('roles/create') }}" class="btn btn-primary float-right mt-3">Add User-type</a>
                             </div>
                         </div>
@@ -80,7 +81,8 @@
 </div>
 
 <!-- jQuery (local) -->
-<script src="{{ asset('../js/jquery.min.js') }}"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('../js/sweetalert2.min.js') }}"></script>
 
 <script>

@@ -4,6 +4,8 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,15 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Auth::viaRequest('custom-login', function ($request) {
+            $user = User::where('email', $request->email)->first();
+        
+            if ($user && $user->is_archived) {
+                return null; // Prevent login if user is archived
+            }
+        
+            return $user;
+        });
+        
     }
 }

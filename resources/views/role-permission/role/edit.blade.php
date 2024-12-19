@@ -5,6 +5,8 @@
     <!-- Local FontAwesome CSS -->
     <link rel="stylesheet" href="{{ asset('../fontawesome/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('../css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('../css/sweetalert2.min.css') }}">
+
 </head>
 <body class="text-sm">
 
@@ -51,6 +53,9 @@
 </div>
 <!-- jQuery (local) -->
 <script src="{{ asset('../js/jquery.min.js') }}"></script>
+<script src="{{ asset('../js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('../js/sweetalert2.min.js') }}"></script>
+
 <script>
     $(document).ready(function() {
         // Toggle sidebar menu

@@ -15,26 +15,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            <!-- Page Heading -->
-            <header class="bg-light">
-                <div class="content-header">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
-                                <h1 class="m-0">Account Setting</h1>
-                            </div>
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-sm-right">
-                                    <li class="breadcrumb-item" style="color: rgb(6, 193, 255);">Home</li>
-                                    <li class="breadcrumb-item active">Account</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
+        <div class="min-h-screen" style="background-color: transparent">
             <!-- Page Content -->
             <main>
                 {{ $slot }}

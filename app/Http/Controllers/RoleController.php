@@ -16,56 +16,40 @@ class RoleController extends Controller
             'roles' => $roles
         ]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('role-permission.role.create');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
             'name' => [
                 'required',
                 'string',
-                'unique:roles,name',        
             ]
         ]);
 
+        // Check if the role already exists
+        $existingRole = Role::where('name', $request->name)->first();
+        if ($existingRole) {
+            return redirect('roles')->with('status', 'Role already exists.');
+        }
+        // Create the new role
         Role::create([
             'name' => $request->name
         ]);
-
-        return redirect('roles')->with('status', 'Role Creates Successfully');
+        return redirect('roles')->with('status', 'Role created successfully');
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Role $role)
     {
         return view('role-permission.role.edit', [
             'role' => $role
         ]);
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Role $role)
     {
         $request->validate([
@@ -75,24 +59,17 @@ class RoleController extends Controller
                 'unique:roles,name,'.$role->id       
             ]
         ]);
-
         $role->update([
             'name' => $request->name
         ]);
-
         return redirect('roles')->with('status', 'Role Updated Successfully');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($roleId)
     {
         $role = Role::find($roleId);
         $role->delete();
         return redirect('roles')->with('status', 'Role Deleted Successfully');
     }
-
     public function addPermissionRole($roleId)
     {
         $permissions = Permission::get();
@@ -101,7 +78,6 @@ class RoleController extends Controller
                                     ->where('role_has_permissions.role_id', $role->id)
                                     ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
                                     ->all();
-
         return view('role-permission.role.add-permissions', [
             'role' => $role,
             'permissions' => $permissions,
@@ -113,10 +89,8 @@ class RoleController extends Controller
         $request->validate([
             'permission' => 'required'
         ]);
-        
         $role = Role::findOrFail($roleId);
         $role->syncPermissions($request->permission);
-
         return redirect()->back()->with('status', 'Permission added to role');
     }
 }

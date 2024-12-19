@@ -5,6 +5,8 @@
     <!-- Local FontAwesome CSS -->
     <link rel="stylesheet" href="{{ asset('../fontawesome/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('../css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('../css/sweetalert2.min.css') }}">
+
 </head>
 <body class="text-sm">
 
@@ -30,27 +32,40 @@
                                 <form action="{{ url('roles') }}" method="POST">
                                     @csrf
                                     <div class="mb-3">
-                                        <label for="name">User-type</label>
-                                        <input type="text" name="name" class="form-control">
+                                        <label for="name">User-type<span style="color: red;"> *</span></label>
+                                        <select name="name" class="form-control" id="name">
+                                            <option value="" disabled selected>Select user type</option>
+                                            <option value="Admin">Admin</option>
+                                            <option value="Accounting">Accounting</option>
+                                            <option value="Records">Records</option>
+                                            <option value="Department_Head">Department_Head</option>
+                                            <option value="Principal">Principal</option>
+                                            <option value="Guard">Guard</option>
+                                            <option value="Guest">Guest</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
                                         <button type="submit" class="btn btn-success">Save</button>
                                     </div>
                                 </form>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <footer class="main-footer">
+    <footer class="main-footer bg-dark text-light py-16">
         @include('includes.footer')
     </footer>
 </div>
 
 <!-- jQuery (local) -->
 <script src="../js/jquery.min.js"></script>
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('../js/sweetalert2.min.js') }}"></script>
+
 
 <script>
     $(document).ready(function() {

@@ -26,38 +26,37 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
+    
+        // Check if the authenticated user is archived
+        if (Auth::user()->is_archived) {
+            Auth::logout();  // Log out the archived user
+            return redirect()->route('login.view')->withErrors(['Your account is archived and cannot be accessed.']);
+        }
+    
         $request->session()->regenerate();
-
-        // return redirect()->intended(RouteServiceProvider::HOME);
-
-        // Check if the authenticated user has a role that should be redirected to a specific dashboard
+    
+        // Redirect based on the user's role
         if (Auth::user()->hasRole('Super-admin')) {
-        // Redirect admin users to the admin dashboard
-        return redirect()->route('super-admin.dashboard');
-    }   else if (Auth::user()->hasRole('Guard'))  { /// Guard
-        // Redirect regular users to the default dashboard
-        return redirect()->route('admin-guard.dashboard');
-    }   else if (Auth::user()->hasRole('Principal'))  {
-        // Redirect regular users to the default dashboard
-        return redirect()->route('super-admin.dashboard');
-    }   else if (Auth::user()->hasRole('Department_Head'))  {
-        // Redirect regular users to the default dashboard
-        return redirect()->route('department-head.dashboard');
-    }   else if (Auth::user()->hasRole('Records'))  {
-        // Redirect regular users to the default dashboard
-        return redirect()->route('records.dashboard');
-    }   else if (Auth::user()->hasRole('Accounting'))  {
-        // Redirect regular users to the default dashboard
-        return redirect()->route('accounting.dashboard');
-    }   else if (Auth::user()->hasRole('Admin'))  {
-        // Redirect regular users to the default dashboard
-        return redirect()->route('admin.dashboard');
-    }   else {
-        return redirect()->intended(RouteServiceProvider::HOME);
+            return redirect()->route('super-admin.dashboard');
+        } elseif (Auth::user()->hasRole('Guard')) {
+            return redirect()->route('admin-guard.dashboard');
+        } elseif (Auth::user()->hasRole('Clinic')) {
+            return redirect()->route('clinic.dashboard');
+        } elseif (Auth::user()->hasRole('Guidance')) {
+            return redirect()->route('guidance.dashboard');
+        } elseif (Auth::user()->hasRole('Records')) {
+            return redirect()->route('records.dashboard');
+        } elseif (Auth::user()->hasRole('Accounting')) {
+            return redirect()->route('accounting.dashboard');
+        } elseif (Auth::user()->hasRole('Admin')) {
+            return redirect()->route('admin.dashboard');
+        } elseif (Auth::user()->hasRole('Principal')) {
+            return redirect()->route('TransactionMonitoring.dashboard');
+        } else {
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
     }
-
-    }
+    
 
     /**
      * Destroy an authenticated session.
